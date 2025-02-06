@@ -10,8 +10,13 @@ const schema = a.schema({
   Todo: a
     .model({
       content: a.string(),
-    })
-    .authorization((allow) => [allow.publicApiKey()]),
+//    }) .authorization((allow) => [allow.publicApiKey()]),
+      /*
+The to-do items in the starter are currently shared across all users, but, in most cases, you want data to be isolated on a per-user basis.
+
+To isolate the data on a per-user basis, you can use an "owner-based authorization rule". Let's apply the owner-based authorization rule to your to-do items:
+      */
+      }).authorization(allow => [allow.owner()]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
@@ -19,7 +24,8 @@ export type Schema = ClientSchema<typeof schema>;
 export const data = defineData({
   schema,
   authorizationModes: {
-    defaultAuthorizationMode: "apiKey",
+    //defaultAuthorizationMode: "apiKey",
+    defaultAuthorizationMode: 'userPool',
     // API Key is used for a.allow.public() rules
     apiKeyAuthorizationMode: {
       expiresInDays: 30,
